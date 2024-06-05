@@ -37,7 +37,7 @@ const Clients = () => {
       <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-2 xl:gap-x-8">
         {clients.map((client) => (
           <div key={client.id} className="group relative">
-            <div className="flex flex-col md:flex-row gap-10 bg-gray-100 px-3 py-5 rounded-xl shadow-md">
+            <div className="flex flex-col md:flex-row gap-10 border px-3 py-5 rounded-xl shadow-lg">
               <div>
                 <h2 className="font-semibold text-xl mb-2">Before</h2>
                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md shadow-md lg:aspect-none group-hover:opacity-75 lg:h-[300px]">
