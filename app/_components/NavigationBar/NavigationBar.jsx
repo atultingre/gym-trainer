@@ -1,22 +1,17 @@
 "use client";
-import { Fragment } from "react";
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Transition,
 } from "@headlessui/react";
 import { MenuIcon, X } from "lucide-react";
 import { DarkModeButton } from "./DarkModeButton";
+import Link from "next/link";
 
 const navigation = [
   { name: "Home", href: "/", current: true },
-  { name: "Results", href: "/results", current: false },
-  { name: "Comments", href: "/comments", current: false },
+  { name: "Clients", href: "/clients", current: false },
+  { name: "Reviews", href: "/reviews", current: false },
 ];
 
 function classNames(...classes) {
@@ -25,7 +20,7 @@ function classNames(...classes) {
 
 export default function NavigationBar() {
   return (
-    <Disclosure as="nav" className="bg-gray-800" asChild>
+    <Disclosure as="nav" className="fixed top-0 w-full bg-gray-800 z-10" asChild>
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -46,7 +41,7 @@ export default function NavigationBar() {
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
                         href={item.href}
                         className={classNames(
@@ -58,7 +53,7 @@ export default function NavigationBar() {
                         aria-current={item.current ? "page" : undefined}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -72,9 +67,8 @@ export default function NavigationBar() {
           <DisclosurePanel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
               {navigation.map((item) => (
-                <DisclosureButton
+                <Link
                   key={item.name}
-                  as="a"
                   href={item.href}
                   className={classNames(
                     item.current
@@ -85,7 +79,7 @@ export default function NavigationBar() {
                   aria-current={item.current ? "page" : undefined}
                 >
                   {item.name}
-                </DisclosureButton>
+                </Link>
               ))}
             </div>
           </DisclosurePanel>
