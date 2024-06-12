@@ -1,63 +1,35 @@
-import React from "react";
-const clients = [
-  {
-    id: 1,
-    name: "Basic Tee",
-    beforeImageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    afterImageSrc: "./profile.jpg",
-  },
-  {
-    id: 2,
-    name: "Basic Tee",
-    beforeImageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    afterImageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-  },
-  {
-    id: 3,
-    name: "Basic Tee",
-    beforeImageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    afterImageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-  },
-];
+"use client";
+import React, { useEffect, useState } from "react";
+import { db } from "@/utils/dbConfig";
+import { Clients } from "../../../utils/schema";
 
-const Clients = () => {
+const GymClients = () => {
+  const [images, setImages] = useState([]);
+  console.log("clients: ", images);
+  const fetchImages = async () => {
+    try {
+      const result = await db.select().from(Clients).execute();
+      const imageUrls = result.map((row) => ({ id: row.id, url: row.image }));
+      setImages(imageUrls);
+    } catch (error) {
+      console.error("Error fetching images from database:", error);
+    }
+  };
+  useEffect(() => {
+    fetchImages();
+  }, []);
   return (
-    <div className="max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <div className="max-w-2xl py-16 sm:px-0 sm:py-5 md:max-w-7xl">
       <h2 className="font-bold text-3xl mt-5">Clients</h2>
-      <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-2 xl:gap-x-8">
-        {clients.map((client) => (
+      <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+        {images.map((client) => (
           <div key={client.id} className="group relative">
-            <div className="flex flex-col md:flex-row gap-10 border px-3 py-5 rounded-xl shadow-lg">
-              <div>
-                <h2 className="font-semibold text-xl mb-2">Before</h2>
-                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md shadow-md lg:aspect-none group-hover:opacity-75 lg:h-[300px]">
-                  <img
-                    src={client.beforeImageSrc}
-                    alt={client.name}
-                    className="h-full w-full object-cover object-center lg:h-[300px] lg:w-[300px]"
-                  />
-                </div>
-              </div>
-              <div>
-                <h2 className="font-semibold text-xl mb-2">After</h2>
-                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md shadow-lg lg:aspect-none group-hover:opacity-75 lg:h-[300px]">
-                  <img
-                    src={client.afterImageSrc}
-                    alt={client.name}
-                    className="h-80 w-full object-cover object-center lg:h-[300px] lg:w-[300px]"
-                  />
-                </div>
-              </div>
+            <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+              <img
+                src={client.url}
+                alt={client.url}
+                className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+              />
             </div>
           </div>
         ))}
@@ -67,4 +39,4 @@ const Clients = () => {
   );
 };
 
-export default Clients;
+export default GymClients;
