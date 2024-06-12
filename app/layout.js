@@ -20,7 +20,9 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <Layout>{children}</Layout>
+          <Layout>
+            {children}
+          </Layout>
         </ThemeProvider>
       </body>
     </html>

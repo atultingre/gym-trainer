@@ -25,12 +25,14 @@ export default function NavigationBar() {
   return (
     <>
       <div
-        className={`fixed top-0 w-full flex justify-between items-center py-2 px-11 z-10 shadow-md ${
-          theme === "light" ?"bg-white":  "bg-black"  
+        className={`fixed top-0 w-full flex justify-between items-center py-2 px-5 z-10 shadow-md ${
+          theme === "light" ? "bg-white" : "bg-black"
         }`}
       >
         <div className="rotate-[-45deg] cursor-pointer">
-          <Dumbbell size={40} className=" text-red-600" />
+          <Link href={"/"}>
+            <Dumbbell size={40} className=" text-red-600" />
+          </Link>
         </div>
         <div>
           <DarkModeButton />

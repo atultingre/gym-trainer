@@ -19,7 +19,7 @@ const GymClients = () => {
     fetchImages();
   }, []);
   return (
-    <div className="max-w-2xl py-16 sm:px-0 sm:py-5 md:max-w-7xl">
+    <div className="mt-10 max-w-2xl py-16 sm:px-0 sm:py-5 md:max-w-7xl">
       <h2 className="font-bold text-3xl mt-5">Clients</h2>
       <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
         {images.map((client) => (

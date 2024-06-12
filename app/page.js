@@ -1,7 +1,8 @@
 "use client";
 import GymClients from "./(routes)/clients/page";
 import Dashboard from "./(routes)/dashboard/page";
-import Reviews from "./(routes)/reviews/page";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   return (
@@ -9,7 +10,9 @@ export default function Home() {
       {/* <UploadForm /> */}
       <Dashboard />
       <GymClients />
-      <Reviews />
+      {/* <Reviews /> */}
+      <ToastContainer />
+
     </div>
   );
 }
