@@ -6,6 +6,15 @@ import { db } from "../../../utils/dbConfig";
 import { Clients } from "../../../utils/schema";
 import { toast } from "react-toastify";
 import { Dumbbell } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function AddClient() {
   const [image, setImage] = useState(null);
@@ -51,46 +60,55 @@ export default function AddClient() {
   }, []);
 
   return (
-    <div className="p-5 mt-20 w-full">
-      {/* <form onSubmit={handleImageUpload}>
-        <input type="file" onChange={(e) => setImage(e.target.files[0])} />
-        <button type="submit">Upload Image</button>
-      </form> */}
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <Dumbbell
-            size={40}
-            className=" text-red-600 mx-auto cursor-pointer"
-          />
-          <h2 className="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Add Client
-          </h2>
-        </div>
+    <div className="px-2  my-10 w-full">
+      <div className="flex justify-end w-full mt-10">
+        <Dialog>
+          <DialogTrigger className="bg-white text-black px-3 py-2 rounded-lg">Add Client</DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <div className="flex flex-1 flex-col justify-center lg:px-8">
+                <div className="sm:mx-auto justify-center sm:w-full sm:max-w-sm">
+                  <div className="cursor-pointer flex justify-center  w-full mt-4 h-16">
+                    <img
+                      src="./logo-black.png"
+                      alt="logo"
+                      className="rounded-full bg-white p-1"
+                    />
+                  </div>
+                  <h2 className="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-white-700">
+                    Add Client
+                  </h2>
+                </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={handleImageUpload}>
-            <div className="mt-2">
-              <input
-                id="image"
-                name="image"
-                type="file"
-                autoComplete="image"
-                onChange={(e) => setImage(e.target.files[0])}
-                required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
+                <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
+                  <form className="space-y-6" onSubmit={handleImageUpload}>
+                    <div className="mt-2">
+                      <input
+                        id="image"
+                        name="image"
+                        type="file"
+                        className=""
+                        autoComplete="image"
+                        onChange={(e) => setImage(e.target.files[0])}
+                        required
+                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      />
+                    </div>
 
-            <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
-        </div>
+                    <div>
+                      <button
+                        type="submit"
+                        className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg py-5">
