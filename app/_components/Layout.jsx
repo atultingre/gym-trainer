@@ -4,10 +4,10 @@ import NavigationBar from "./NavigationBar/NavigationBar";
 const Layout = ({ children }) => {
   return (
     <div>
-      <NavigationBar />
-      <main className="flex min-h-screen px-5 ">
-        {children}
-      </main>
+      <div className="mb-20">
+        <NavigationBar />
+      </div>
+      <main className="flex min-h-screen px-5 py-5">{children}</main>
     </div>
   );
 };

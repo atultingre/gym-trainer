@@ -10,7 +10,7 @@ export default function NavigationBar() {
   return (
     <>
       <div
-        className={`fixed top-0 w-full flex justify-between items-center py-2 px-5 z-10 shadow-md bg-black`}
+        className={`fixed top-0 w-full flex justify-between items-center py-2 px-5 z-10  bg-black`}
       >
         <Link href={"/"}>
           <div className="cursor-pointer w-12 h-12 p-1">

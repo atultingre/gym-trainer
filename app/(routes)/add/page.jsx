@@ -1,12 +1,30 @@
 "use client";
 import { useState, useEffect } from "react";
 import { storage } from "../../../firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 import { db } from "../../../utils/dbConfig";
 import { Clients } from "../../../utils/schema";
 import { toast } from "react-toastify";
 import { Dumbbell } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import {
   Dialog,
   DialogContent,
@@ -15,27 +33,29 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { eq } from "drizzle-orm";
+import { v4 as uuidv4 } from "uuid";
 
 export default function AddClient() {
   const [image, setImage] = useState(null);
   const [images, setImages] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleImageUpload = async (e) => {
     e.preventDefault();
     if (!image) return;
 
     try {
-      const imageRef = ref(storage, `images/${image.name}`);
+      const uniqueImageName = `${uuidv4()}-${image.name}`;
+      const imageRef = ref(storage, `images/${uniqueImageName}`);
       const snapshot = await uploadBytes(imageRef, image);
       const imageUrl = await getDownloadURL(snapshot.ref);
-      console.log("imageUrl: ", imageUrl);
 
-      // Insert the image URL into the PostgreSQL database
       await db.insert(Clients).values({ image: imageUrl }).execute();
       toast.success("Image uploaded successfully");
 
-      // Refresh the images list
       fetchImages();
+      setIsModalOpen(false);
     } catch (error) {
       console.error("Error uploading image or adding URL to database:", error);
       toast.error("Failed to upload image");
@@ -52,8 +72,28 @@ export default function AddClient() {
     }
   };
 
-  const handleEdit = async () => {};
-  const handleDelete = async () => {};
+  const handleDelete = async (image) => {
+    try {
+      // Delete the image from Firebase Storage
+      const imageRef = ref(storage, image.url);
+      await deleteObject(imageRef);
+
+      // Delete the image record from the database
+      const result = await db
+        .delete(Clients)
+        .where(eq(Clients.id, image.id))
+        .returning();
+      if (result) {
+        // Update the local state to reflect the deletion
+        // setImages(images.filter((image) => image.id !== id));
+        fetchImages();
+        toast.success("Image deleted successfully");
+      }
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      toast.error("Failed to delete image");
+    }
+  };
 
   useEffect(() => {
     fetchImages();
@@ -62,8 +102,10 @@ export default function AddClient() {
   return (
     <div className="px-2  my-10 w-full">
       <div className="flex justify-end w-full mt-10">
-        <Dialog>
-          <DialogTrigger className="bg-white text-black px-3 py-2 rounded-lg">Add Client</DialogTrigger>
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogTrigger className="bg-white text-black px-3 py-2 rounded-lg">
+            Add Client
+          </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <div className="flex flex-1 flex-col justify-center lg:px-8">
@@ -87,11 +129,10 @@ export default function AddClient() {
                         id="image"
                         name="image"
                         type="file"
-                        className=""
                         autoComplete="image"
                         onChange={(e) => setImage(e.target.files[0])}
                         required
-                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        className="block w-full rounded-md border-0 px-1.5 py-1.5 text-white-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       />
                     </div>
 
@@ -138,18 +179,31 @@ export default function AddClient() {
                   />
                 </td>
                 <td className="py-4 px-6 flex gap-5 items-center justify-center">
-                  <button
-                    onClick={() => handleEdit(image.id, image.url)}
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(image.id, image.url)}
-                    className="font-medium text-red-600 dark:text-red-500 hover:underline"
-                  >
-                    Delete
-                  </button>
+                  <AlertDialog>
+                    <AlertDialogTrigger className="font-medium px-3 py-2 rounded-lg bg-red-600 text-white dark:text-white hover:underline">
+                      Delete
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete the imagee from the database.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          className="bg-red-500 text-white"
+                          onClick={() => handleDelete(image)}
+                        >
+                          Yes
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </td>
               </tr>
             ))}

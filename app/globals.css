@@ -75,6 +75,10 @@
   }
 }
 
+body {
+  background: #000;
+}
+
 li {
   font-weight: bold;
   cursor: pointer;
