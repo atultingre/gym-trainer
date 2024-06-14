@@ -83,3 +83,7 @@ li {
   font-weight: bold;
   cursor: pointer;
 }
+
+.cursor-disable {
+  cursor: not-allowed;
+}

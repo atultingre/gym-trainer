@@ -10,7 +10,7 @@ import {
 import { db } from "../../../utils/dbConfig";
 import { Clients } from "../../../utils/schema";
 import { toast } from "react-toastify";
-import { Dumbbell } from "lucide-react";
+import { Dumbbell, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -40,11 +40,13 @@ export default function AddClient() {
   const [image, setImage] = useState(null);
   const [images, setImages] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setIsLoading] = useState(false);
+  // const [isDeleting, setIsDeleting] = useState({});
 
   const handleImageUpload = async (e) => {
     e.preventDefault();
     if (!image) return;
-
+    setIsLoading(true);
     try {
       const uniqueImageName = `${uuidv4()}-${image.name}`;
       const imageRef = ref(storage, `images/${uniqueImageName}`);
@@ -55,10 +57,13 @@ export default function AddClient() {
       toast.success("Image uploaded successfully");
 
       fetchImages();
+      setIsLoading(false);
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error uploading image or adding URL to database:", error);
       toast.error("Failed to upload image");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -73,6 +78,7 @@ export default function AddClient() {
   };
 
   const handleDelete = async (image) => {
+    setIsLoading(true);
     try {
       // Delete the image from Firebase Storage
       const imageRef = ref(storage, image.url);
@@ -84,14 +90,17 @@ export default function AddClient() {
         .where(eq(Clients.id, image.id))
         .returning();
       if (result) {
+        setIsLoading(false);
+
         // Update the local state to reflect the deletion
-        // setImages(images.filter((image) => image.id !== id));
         fetchImages();
         toast.success("Image deleted successfully");
       }
     } catch (error) {
       console.error("Error deleting image:", error);
       toast.error("Failed to delete image");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -139,9 +148,15 @@ export default function AddClient() {
                     <div>
                       <button
                         type="submit"
-                        className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        className={`flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${
+                          loading && "cursor-disable"
+                        } `}
                       >
-                        Submit
+                        {loading ? (
+                          <Loader2 className="animate-spin mr-2" />
+                        ) : (
+                          "Submit"
+                        )}
                       </button>
                     </div>
                   </form>
@@ -196,10 +211,16 @@ export default function AddClient() {
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                          className="bg-red-500 text-white"
+                          className={`bg-red-500 text-white ${
+                            loading && "cursor-disable"
+                          }`}
                           onClick={() => handleDelete(image)}
                         >
-                          Yes
+                          {loading ? (
+                            <Loader2 className="animate-spin mr-2" />
+                          ) : (
+                            "Yes"
+                          )}
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
