@@ -25,12 +25,20 @@ export default function NavigationBar() {
         )}
 
         {token && (
-          <button
-            className="cursor-pointer bg-white text-black py-1 px-4 rounded-lg shadow-md hover:shadow-orange-700 hover:border-black-400 border text-sm"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
+          <div className="gap-2 flex">
+            <Link
+              href={"/add"}
+              className="cursor-pointer bg-inherit text-black py-1 px-4 rounded-lg shadow-md hover:shadow-orange-700 hover:border-black-400 border text-sm"
+            >
+              Add
+            </Link>
+            <button
+              className="cursor-pointer bg-inherit text-black py-1 px-4 rounded-lg shadow-md hover:shadow-orange-700 hover:border-black-400 border text-sm"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
         )}
       </nav>
     </>

@@ -70,7 +70,7 @@ const ClientsTable = ({ images, loading }) => {
               </td>
               <td className=" px-6 flex items-center h-36  justify-center">
                 <AlertDialog>
-                  <AlertDialogTrigger className="w-40 font-medium px-3 py-2 rounded-lg bg-red-600 text-white dark:text-white">
+                  <AlertDialogTrigger className="w-32 font-medium px-3 py-2 rounded-lg bg-red-600 text-white dark:text-white">
                     Delete
                   </AlertDialogTrigger>
                   <AlertDialogContent>
