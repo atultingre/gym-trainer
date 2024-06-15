@@ -1,9 +1,10 @@
 import { Outfit } from "next/font/google";
-import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Layout from "./_components/Layout";
-import { ToastContainer, toast } from "react-toastify";
+import { AuthProvider } from "./context/AuthContext";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./globals.css";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -22,10 +23,12 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <Layout>
-            {children}
-            <ToastContainer />
-          </Layout>
+          <AuthProvider>
+            <Layout>
+              {children}
+              <ToastContainer />
+            </Layout>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -5,7 +5,7 @@ export default function Dashboard() {
     <div className="flex flex-col-reverse justify-between items-center md:flex md:flex-row gap-10">
       <div className="items-center">
         {/* <h2 className="font-bold text-3xl">Radheshyam Jogdand</h2> */}
-        <div className="text-xl flex flex-col gap-2 text-justify">
+        <div className="text-xl flex text-white flex-col gap-2 text-justify">
           <span>
             Hello! I'm <span className="text-[gold] font-bold"> Radheshyam Jogdand</span>,
             a fitness professional with over <span className="text-[gold] font-bold">6+ years of experience</span>. I've

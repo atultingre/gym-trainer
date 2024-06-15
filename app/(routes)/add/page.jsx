@@ -11,19 +11,6 @@ import { db } from "../../../utils/dbConfig";
 import { Clients } from "../../../utils/schema";
 import { toast } from "react-toastify";
 import { Dumbbell, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 import {
   Dialog,
@@ -35,13 +22,14 @@ import {
 } from "@/components/ui/dialog";
 import { eq } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
+import withAuth from "@/app/hoc/withAuth";
+import ClientsTable from "@/app/_components/ClientsTable";
 
-export default function AddClient() {
+const AddClient = () => {
   const [image, setImage] = useState(null);
   const [images, setImages] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setIsLoading] = useState(false);
-  // const [isDeleting, setIsDeleting] = useState({});
 
   const handleImageUpload = async (e) => {
     e.preventDefault();
@@ -77,42 +65,15 @@ export default function AddClient() {
     }
   };
 
-  const handleDelete = async (image) => {
-    setIsLoading(true);
-    try {
-      // Delete the image from Firebase Storage
-      const imageRef = ref(storage, image.url);
-      await deleteObject(imageRef);
-
-      // Delete the image record from the database
-      const result = await db
-        .delete(Clients)
-        .where(eq(Clients.id, image.id))
-        .returning();
-      if (result) {
-        setIsLoading(false);
-
-        // Update the local state to reflect the deletion
-        fetchImages();
-        toast.success("Image deleted successfully");
-      }
-    } catch (error) {
-      console.error("Error deleting image:", error);
-      toast.error("Failed to delete image");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchImages();
   }, []);
 
   return (
-    <div className="px-2  my-10 w-full">
-      <div className="flex justify-end w-full mt-10">
+    <div className="px-2  mb-10 w-full">
+      <div className="flex justify-end w-full ">
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogTrigger className="bg-white text-black px-3 py-2 rounded-lg">
+          <DialogTrigger className="text-highlited  text-black px-3 py-2 rounded-lg">
             Add Client
           </DialogTrigger>
           <DialogContent>
@@ -167,70 +128,9 @@ export default function AddClient() {
         </Dialog>
       </div>
 
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg py-5">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Image
-              </th>
-              <th scope="col" className="px-6 py-3 text-center">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {images.map((image, index) => (
-              <tr
-                key={index}
-                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-              >
-                <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <img
-                    src={image.url}
-                    alt={image.url}
-                    style={{ maxWidth: "100px" }}
-                    className="rounded-lg"
-                  />
-                </td>
-                <td className="py-4 px-6 flex gap-5 items-center justify-center">
-                  <AlertDialog>
-                    <AlertDialogTrigger className="font-medium px-3 py-2 rounded-lg bg-red-600 text-white dark:text-white hover:underline">
-                      Delete
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete the imagee from the database.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          className={`bg-red-500 text-white ${
-                            loading && "cursor-disable"
-                          }`}
-                          onClick={() => handleDelete(image)}
-                        >
-                          {loading ? (
-                            <Loader2 className="animate-spin mr-2" />
-                          ) : (
-                            "Yes"
-                          )}
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <ClientsTable images={images} loading={loading} />
     </div>
   );
-}
+};
+
+export default withAuth(AddClient);

@@ -77,6 +77,7 @@
 
 body {
   background: #000;
+  /* color: #fff; */
 }
 
 li {
@@ -86,4 +87,16 @@ li {
 
 .cursor-disable {
   cursor: not-allowed;
+}
+
+nav {
+  background: #ff512f;
+  background: -webkit-linear-gradient(to right, #f09819, #ff512f);
+  background: linear-gradient(to right, #f09819, #ff512f);
+}
+
+.text-highlited {
+  background: #ff512f;
+  background: -webkit-linear-gradient(to right, #f09819, #ff512f);
+  background: linear-gradient(to right, #f09819, #ff512f);
 }
