@@ -73,7 +73,7 @@ const AddClient = () => {
     <div className="px-2  mb-10 w-full">
       <div className="flex justify-end w-full ">
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogTrigger className="text-highlited  text-black px-3 py-2 rounded-lg">
+          <DialogTrigger className="bg-white  text-black px-3 py-2 rounded-lg font-semibold">
             Add Client
           </DialogTrigger>
           <DialogContent>
@@ -109,9 +109,10 @@ const AddClient = () => {
                     <div>
                       <button
                         type="submit"
+                        disabled={loading}
                         className={`flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${
-                          loading && "cursor-disable"
-                        } `}
+                          loading ? "cursor-not-allowed" : ""
+                        }`}
                       >
                         {loading ? (
                           <Loader2 className="animate-spin mr-2" />
@@ -128,7 +129,12 @@ const AddClient = () => {
         </Dialog>
       </div>
 
-      <ClientsTable images={images} loading={loading} />
+      <ClientsTable
+        images={images}
+        loading={loading}
+        setIsLoading={setIsLoading}
+        fetchImages={fetchImages}
+      />
     </div>
   );
 };

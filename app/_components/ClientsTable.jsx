@@ -1,6 +1,4 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,8 +10,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from "react-toastify";
+import { eq } from "drizzle-orm";
+import { deleteObject, ref } from "firebase/storage";
+import { db } from "@/utils/dbConfig";
+import { storage } from "@/firebase";
+import { Loader2 } from "lucide-react";
+import { Clients } from "@/utils/schema";
 
-const ClientsTable = ({ images, loading }) => {
+const ClientsTable = ({ images, loading, setIsLoading, fetchImages }) => {
   const handleDelete = async (image) => {
     setIsLoading(true);
     try {
@@ -86,6 +91,7 @@ const ClientsTable = ({ images, loading }) => {
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <AlertDialogAction
+                        disabled={loading}
                         className={`bg-red-500 text-white ${
                           loading && "cursor-disable"
                         }`}

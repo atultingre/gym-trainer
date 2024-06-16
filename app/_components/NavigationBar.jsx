@@ -28,12 +28,12 @@ export default function NavigationBar() {
           <div className="gap-2 flex">
             <Link
               href={"/add"}
-              className="cursor-pointer bg-inherit text-black py-1 px-4 rounded-lg shadow-md hover:shadow-orange-700 hover:border-black-400 border text-sm"
+              className="cursor-pointer bg-inherit text-black py-1 px-4 rounded-lg shadow-md hover:shadow-orange-700 hover:border-black hover:text-white border text-sm"
             >
               Add
             </Link>
             <button
-              className="cursor-pointer bg-inherit text-black py-1 px-4 rounded-lg shadow-md hover:shadow-orange-700 hover:border-black-400 border text-sm"
+              className="cursor-pointer bg-inherit text-black py-1 px-4 rounded-lg shadow-md hover:shadow-orange-700 hover:border-black hover:text-white border text-sm "
               onClick={handleLogout}
             >
               Logout
